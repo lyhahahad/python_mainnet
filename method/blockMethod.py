@@ -2,18 +2,21 @@ import hashlib
 import classes.blockClass as blockClass
 
 # 무작위 대입을 통한 채굴하기.
-def mining(txs, previousBlockHash, diff):
-    #return block
+def mining(mempool, previousBlockHash, diff):
     nonce= 0 
     str = previousBlockHash
     difficulty = "0"*diff
-    for i in txs:
-        str += ("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))  
+    
+    while(mempool):
+        i = mempool.pop(0)
+        str += ("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))
+        print("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))
+    
     while(hashlib.sha256((str+"%s" %nonce).encode()).hexdigest()[:diff]!=difficulty):
         nonce+=1
 
     newBlock = blockClass.Block()
-    newBlock.verifiedTx = txs
+    newBlock.verifiedTx = mempool
     newBlock.previousBlockHash = previousBlockHash
     newBlock.nonce = nonce
     newBlock.BlockHash = hashlib.sha256((str+"%s" %nonce).encode()).hexdigest()

@@ -10,6 +10,8 @@ def inMempool(mempool, tx):
 
 #트랜잭션을 mempool에 추가한다.
 def addToMempool(mempool, tx):
+    # verifyTx(tx)
+    mempool.append(tx)
     return
 
 #트랜잭션을 검증한다.

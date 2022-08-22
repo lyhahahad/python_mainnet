@@ -5,3 +5,5 @@ class Block:
         self.nonce = ""
         self.BlockHash = ""
         self.difficulty = 0
+        # self.coinbase = 100
+        # self.blockproducer
