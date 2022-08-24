@@ -1,14 +1,14 @@
-import Crypto
-import Crypto.Random
-from Crypto.Hash import SHA
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
+import binascii
 
 class Client:
-    def __init__(self, seedPhrase):
-        random = Crypto.Random.new().read
-        self.privateKey = RSA.generate(seedPhrase, random)
-        self.publicKey = self._private_key.publickey()
-        self.signer = PKCS1_v1_5.new(self._private_key)
+   def __init__(self, seed):
+      # random = Crypto.Random.new().read
+      self._private_key = RSA.generate(seed)
+      self._public_key = self._private_key.publickey()
+      self._signer = PKCS1_v1_5.new(self._private_key)
 
-# a = Client(seedPhrase="11")
+   @property
+   def identity(self):
+      return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii')

@@ -1,39 +1,46 @@
 import hashlib
 import classes.blockClass as blockClass
 
-# 무작위 대입을 통한 채굴하기.
-def mining(mempool, previousBlockHash, diff):
+#블록 생성하기.
+def genBlock(mempool, client, diff):
+    newBlock = mining(mempool, "0000000000000000000000000000000", diff, client)
+    while(True):
+        newBlock = mining(mempool,newBlock.BlockHash, diff, client)
+        # print("previousBlockHash : ", newBlock.previousBlockHash)
+        # print("Blockhash : ", newBlock.BlockHash)
+
+#블록 채굴하기.
+def mining(mempool, previousBlockHash, diff, client):
     nonce= 0 
     str = previousBlockHash
     difficulty = "0"*diff
-    
+    verifiedTx = []
     while(mempool):
         i = mempool.pop(0)
-        str += ("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))
-        print("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))
+        str += ("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient, i.value))
+        verifiedTx.append(i)
     
     while(hashlib.sha256((str+"%s" %nonce).encode()).hexdigest()[:diff]!=difficulty):
         nonce+=1
 
-    newBlock = blockClass.Block()
-    newBlock.verifiedTx = mempool
+    newBlock = blockClass.Block(client)
+    newBlock.verifiedTx = verifiedTx
     newBlock.previousBlockHash = previousBlockHash
     newBlock.nonce = nonce
     newBlock.BlockHash = hashlib.sha256((str+"%s" %nonce).encode()).hexdigest()
     newBlock.difficulty = diff
+    for i in newBlock.verifiedTx:
+        print("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))
+
     return newBlock
 
-#mempool에서 트랜잭션 가져오기.
-def makeTxChunk(mempool):
-    # return tx 묶음.
-    return
 
-# block 검증하기.
+#블록 검증하기.
 def verifyBlock(block):
     #return bool
     return
 
-#block 데이터 베이스에 저장하기.
+#블록 데이터 베이스에 저장하기.
 def saveBlock(block):
     return
 
@@ -41,10 +48,10 @@ def saveBlock(block):
 def modifyAccount(tx):
     return
 
-#block 다른 노드(ip)에 전송하기.
+#블록 다른 노드(ip)에 전송하기.
 def broadcastBlock(block, ip):
     return
 
-#fork 선택하기.
-def forkChoice(blockchain, block):
-    return
+# #fork 선택하기.
+# def forkChoice(blockchain, block):
+#     return
