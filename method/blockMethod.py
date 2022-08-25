@@ -3,14 +3,15 @@ import classes.blockClass as blockClass
 
 #블록 생성하기.
 def genBlock(mempool, client, diff):
-    newBlock = mining(mempool, "0000000000000000000000000000000", diff, client)
+    newBlock = mining(mempool, "0"*64, -1, diff, client)
     while(True):
-        newBlock = mining(mempool,newBlock.BlockHash, diff, client)
-        # print("previousBlockHash : ", newBlock.previousBlockHash)
-        # print("Blockhash : ", newBlock.BlockHash)
+        newBlock = mining(mempool,newBlock.BlockHash, newBlock.blockHeight,  diff, client)
+        print("previousBlockHash : ", len(newBlock.previousBlockHash))
+        print("Blockhash : ", newBlock.BlockHash)
+        print(newBlock.blockHeight)
 
 #블록 채굴하기.
-def mining(mempool, previousBlockHash, diff, client):
+def mining(mempool, previousBlockHash, previousBlockHeight, diff, client):
     nonce= 0 
     str = previousBlockHash
     difficulty = "0"*diff
@@ -28,6 +29,7 @@ def mining(mempool, previousBlockHash, diff, client):
     newBlock.previousBlockHash = previousBlockHash
     newBlock.nonce = nonce
     newBlock.BlockHash = hashlib.sha256((str+"%s" %nonce).encode()).hexdigest()
+    newBlock.blockHeight = previousBlockHeight+1
     newBlock.difficulty = diff
     for i in newBlock.verifiedTx:
         print("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))

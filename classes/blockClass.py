@@ -1,6 +1,6 @@
 class Block:
     def __init__(self, client):
-        # self.blockHeight = 0
+        self.blockHeight = 0
         self.verifiedTx = []
         self.previousBlockHash = ""
         self.nonce = ""

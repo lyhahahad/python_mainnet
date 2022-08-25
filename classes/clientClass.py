@@ -4,7 +4,6 @@ import binascii
 
 class Client:
    def __init__(self, seed):
-      # random = Crypto.Random.new().read
       self._private_key = RSA.generate(seed)
       self._public_key = self._private_key.publickey()
       self._signer = PKCS1_v1_5.new(self._private_key)
