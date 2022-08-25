@@ -50,10 +50,6 @@ def saveBlock(block):
 def modifyAccount(tx):
     return
 
-#블록 다른 노드(ip)에 전송하기.
-def broadcastBlock(block, ip):
-    return
-
 # #fork 선택하기.
 # def forkChoice(blockchain, block):
 #     return

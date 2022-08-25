@@ -11,12 +11,11 @@ ip = []
 accounts = []
 client = client.Client(1024)
 print(client.identity)
-print(client._public_key)
+print(client.publicKey)
+
 #새로운 트랜잭션을 생성한다.
-#후에 개인 키 추가하기.
 def genNewTx():
     txMethod.inputTx(mempool, client)
-    # txMethod.broadcastTx(newTx, ip)
 
 # #새로운 트랜잭션을 전송 받았을 때 처리하기.
 # def recNewTx(rectx, signature):

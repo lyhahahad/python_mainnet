@@ -4,10 +4,10 @@ import binascii
 
 class Client:
    def __init__(self, seed):
-      self._private_key = RSA.generate(seed)
-      self._public_key = self._private_key.publickey()
-      self._signer = PKCS1_v1_5.new(self._private_key)
+      self.privateKey = RSA.generate(seed)
+      self.publicKey = self.privateKey.publickey()
+      self.signer = PKCS1_v1_5.new(self.privateKey)
 
    @property
    def identity(self):
-      return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii')
+      return binascii.hexlify(self.publicKey.exportKey(format='DER')).decode('ascii')
