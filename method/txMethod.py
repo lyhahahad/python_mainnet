@@ -1,12 +1,11 @@
 from distutils.log import error
-from operator import truediv
 import classes.txClass as txClass
 import classes.clientClass as client
-import collections
-from Crypto.Signature import pkcs1_15
-from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
 import networking.broadcast as broadcast
+import collections
+import ecdsa
+import pickle
+
 
 #트랜잭션 입력 받기.
 def inputTx(mempool,client):
@@ -16,32 +15,33 @@ def inputTx(mempool,client):
                 recipient = input("recipient : ")
                 value = input("value : ")
                 newTx = txClass.tx(client.publicKey, recipient, value)
-                signTx(newTx, client.privateKey)
-                addToMempool(mempool, newTx)
-                broadcast.broadcastTx(newTx)
-            except (error):
+                dataBytes = txToBytes(newTx)
+                signTx(newTx, dataBytes, client.privateKey)
+                addToMempool(newTx.signature, dataBytes, client.publicKey, mempool, newTx)
+                broadcast.broadcastTx(dataBytes, newTx.signature, newTx.sender)
+            except :
                 print("트랜잭션 입력 중 에러 발생!")
-                print(error)
 
 #트랜잭션 데이터 규격에 맞게 수정.
-def toMsgHash(tx):
-    msg = collections.OrderedDict({
+def txToBytes(tx):
+    return pickle.dumps(collections.OrderedDict({
                 'sender': tx.sender,
                 'recipient': tx.recipient,
-                'value': tx.value})
-    msgHash = SHA256.new((str(msg)).encode('utf8'))
-    return msgHash
+                'value': tx.value,
+                'time' : tx.time}))
+
+# def txToObject(tx):
+
 
 #개인키로 트랜잭션에 서명하기.
-def signTx(tx, privateKey):
-    tx.signature = pkcs1_15.new(privateKey).sign(toMsgHash(tx))
-    return tx.signature
+def signTx(tx, dataBytes, privateKey):
+    tx.signature = privateKey.sign(b"%s"%dataBytes)
 
 #공개키로 트랜잭션 검증하기.
-def verifyTx(tx):
+def verifyTx(sig, data, publicKey):
     #공개키로 트랜잭션 검증.
     try:
-        pkcs1_15.new(tx.sender).verify(toMsgHash(tx), tx.signature)
+        publicKey.verify(sig, data)
         print("The signature is valid.")
         return True
     except (ValueError, TypeError):
@@ -50,8 +50,9 @@ def verifyTx(tx):
 
 
 #트랜잭션을 mempool에 추가한다.
-def addToMempool(mempool, tx):
-    verifyTx(tx)
+def addToMempool(sig, dataBytes, publicKey, mempool, tx):
+    #mempool에 추가 전 트랜잭션 검증.
+    verifyTx(sig, dataBytes, publicKey)
     if inMempool(mempool,tx) :
         return
     mempool.append(tx)

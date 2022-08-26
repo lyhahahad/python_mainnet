@@ -9,10 +9,21 @@ import classes.clientClass as client
 mempool = []
 ip = []
 accounts = []
-client = client.Client(1024)
-print(client.identity)
-print(client.publicKey)
-
+client = client.Client()
+# print(type(client.privateKey))
+# print(client.privateKey)
+# print(type(client.publicKey))
+# print(client.publicKey)
+print(type(client.publicKey.to_string()))
+print(client.publicKey.to_string())
+# print(type())
+# print()
+# print(type())
+# print()
+# print(type())
+# print()
+# print(type())
+# print()
 #새로운 트랜잭션을 생성한다.
 def genNewTx():
     txMethod.inputTx(mempool, client)
@@ -27,7 +38,7 @@ def genNewTx():
 
 #새로운 블록을 생성할 때의 프로세스
 def genNewBlock():
-    blockMethod.genBlock(mempool, client, 5)
+    blockMethod.genBlock(mempool, client, 7)
     # blockMethod.broadcastBlock(newBlock)
     # blockMethod.modifyAccount(newBlock)
 

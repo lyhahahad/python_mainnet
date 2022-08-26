@@ -7,6 +7,6 @@ class Block:
         self.BlockHash = ""
         self.difficulty = 0
         self.coinbase = 100
-        self.blockproducer = client.identity
+        self.blockproducer = client.publicKey
     
     # def blockVerify
