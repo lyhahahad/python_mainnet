@@ -1,6 +1,6 @@
 from distutils.log import error
 import classes.txClass as txClass
-import classes.clientClass as client
+import classes.clientClass as clients
 import networking.broadcast as broadcast
 import collections
 import ecdsa
@@ -19,7 +19,9 @@ def inputTx(mempool,client):
                 signTx(newTx, dataBytes, client.privateKey)
                 addToMempool(newTx.signature, dataBytes, client.publicKey, mempool, newTx)
                 broadcast.broadcastTx(dataBytes, newTx.signature, newTx.sender)
-            except :
+            except(error) :
+                print(error)
+
                 print("트랜잭션 입력 중 에러 발생!")
 
 #트랜잭션 데이터 규격에 맞게 수정.
@@ -61,3 +63,15 @@ def addToMempool(sig, dataBytes, publicKey, mempool, tx):
 #mempool에 해당 트랜잭션이 있는지 확인한다.
 def inMempool(mempool, tx):
     return tx in mempool
+
+#트랜잭션을 받았을 때 처리.
+def receptTx(mempool, tx):
+    # if not txMethod.verifyTx(tx):
+    #     txMethod.addToMempool(mempool, tx)
+    return
+
+#블록을 받았을 때 처리.
+def receptBlock():
+
+
+    return

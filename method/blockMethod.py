@@ -1,3 +1,6 @@
+from __future__ import barry_as_FLUFL
+from distutils.log import error
+import errno
 import hashlib
 import classes.blockClass as blockClass
 
@@ -9,7 +12,7 @@ def genBlock(mempool, client, diff):
         print("previousBlockHash : ", len(newBlock.previousBlockHash))
         print("Blockhash : ", newBlock.BlockHash)
         print(newBlock.blockHeight)
-
+bytes
 #블록 채굴하기.
 def mining(mempool, previousBlockHash, previousBlockHeight, diff, client):
     nonce= 0 
@@ -23,7 +26,8 @@ def mining(mempool, previousBlockHash, previousBlockHeight, diff, client):
     
     while(hashlib.sha256((str+"%s" %nonce).encode()).hexdigest()[:diff]!=difficulty):
         nonce+=1
-
+    print(str+"%s" %nonce)
+    
     newBlock = blockClass.Block(client)
     newBlock.verifiedTx = verifiedTx
     newBlock.previousBlockHash = previousBlockHash

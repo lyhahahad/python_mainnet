@@ -1,2 +1,5 @@
 networking broadcast - reception
-1.rsa, ecdsa
+트랜잭션 받아서 mempool에 추가하는 것까지.
+1.braodcast에서 보낸 것을 reception에서 검증하기.(0)
+2.받은 것을 검증하고 mempool에 추가하기.()
+    mempool 메모리에는 어떻게 접근할 것인가?

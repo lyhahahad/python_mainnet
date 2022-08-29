@@ -1,14 +1,13 @@
 import requests
-
+import json
+import pickle
 
 #트랜잭션을 다른 노드(ip)에 전송한다.
 ip = "http://127.0.0.1:8080/tx"
 def broadcastTx(dataBytes, sig, publickey):
-    print(dataBytes)
-    print(sig)
-    print(publickey)
     publickey = publickey.to_string()
-    requests.post(ip, {'data' : dataBytes, 'signature': sig, 'publicKey' : publickey})
+    serializedData=pickle.dumps({'data' : dataBytes, 'signature': sig, 'publicKey' : publickey})
+    requests.post(ip, data=serializedData)
     return
 
 
