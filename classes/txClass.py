@@ -7,3 +7,6 @@ class tx:
         self.value = value
         self.time = datetime.datetime.now()
         self.signature = ""
+        
+    def timeInit(self, time):
+        self.time =time

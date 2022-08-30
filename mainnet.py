@@ -39,18 +39,19 @@ genNewBlock_thread.start()
 
 while(True):
     comm = input("gentx or recepstart \n")
+    #트랜잭션 생성할 때
     if comm == 'gentx':
         genNewTx_thread = threading.Thread(target = genNewTx)
         genNewTx_thread.start()
         genNewTx_thread.join()
+    #트랜잭션 받고 싶을 때
     elif comm == 'recepstart':
-        portNum = iter(input("portNum : "))
-        # print(type(portNum))
-        reception_thread = threading.Thread(target = recNewTx, args=portNum)
+        portNum = int(input("portNum : "))
+        reception_thread = threading.Thread(target = recNewTx, args=(portNum,))
         reception_thread.start()
+    #트랜잭션 받고 싶지 않을 때
     elif comm == 'recep quit':
         reception_thread.join()
-        continue
+    #없는 명령어일 때
     else : 
         print('존재하지 않는 명령어입니다.')
-        continue

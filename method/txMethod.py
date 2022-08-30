@@ -9,20 +9,20 @@ import pickle
 
 #트랜잭션 입력 받기.
 def inputTx(mempool,client):
-    while(True):
-        if(input()=="gentx"):
-            try : 
-                recipient = input("recipient : ")
-                value = input("value : ")
-                newTx = txClass.tx(client.publicKey, recipient, value)
-                dataBytes = txToBytes(newTx)
-                signTx(newTx, dataBytes, client.privateKey)
-                addToMempool(newTx.signature, dataBytes, client.publicKey, mempool, newTx)
-                broadcast.broadcastTx(dataBytes, newTx.signature, newTx.sender)
-            except(error) :
-                print(error)
-
-                print("트랜잭션 입력 중 에러 발생!")
+    try : 
+        recipient = input("recipient : ")
+        value = input("value : ")
+        newTx = txClass.tx(client.publicKey, recipient, value)
+        dataBytes = txToBytes(newTx)
+        signTx(newTx, dataBytes, client.privateKey)
+        if not verifyTx(newTx.signature, dataBytes, client.publicKey):
+            return
+        addToMempool(mempool, newTx)
+        broadcast.broadcastTx(dataBytes, newTx.signature)
+    except(TypeError, ValueError) :
+        print(TypeError)
+        print(ValueError)
+        print("트랜잭션 입력 중 에러 발생!")
 
 #트랜잭션 데이터 규격에 맞게 수정.
 def txToBytes(tx):
@@ -31,6 +31,10 @@ def txToBytes(tx):
                 'recipient': tx.recipient,
                 'value': tx.value,
                 'time' : tx.time}))
+
+#트랜잭션 데이터 collections 형태로 변환
+def txToCollection(dataBytes):
+    return pickle.loads(dataBytes)
 
 # def txToObject(tx):
 
@@ -46,15 +50,15 @@ def verifyTx(sig, data, publicKey):
         publicKey.verify(sig, data)
         print("The signature is valid.")
         return True
-    except (ValueError, TypeError):
+    except (error):
+        print(error)
         print("The signature is not valid.")
         return False
 
 
 #트랜잭션을 mempool에 추가한다.
-def addToMempool(sig, dataBytes, publicKey, mempool, tx):
-    #mempool에 추가 전 트랜잭션 검증.
-    verifyTx(sig, dataBytes, publicKey)
+def addToMempool(mempool, tx):
+    print("mempool에 추가됨.")
     if inMempool(mempool,tx) :
         return
     mempool.append(tx)
@@ -66,8 +70,8 @@ def inMempool(mempool, tx):
 
 #트랜잭션을 받았을 때 처리.
 def receptTx(mempool, tx):
-    # if not txMethod.verifyTx(tx):
-    #     txMethod.addToMempool(mempool, tx)
+    if verifyTx(tx):
+        addToMempool(mempool, tx)
     return
 
 #블록을 받았을 때 처리.
