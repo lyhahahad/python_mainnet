@@ -35,8 +35,13 @@ def receptionServerStart(mempool, portNum):
                 newTx = txClass.tx(txCollection['sender'],txCollection['recipient'],txCollection['value'])
                 newTx.timeInit(txCollection['time'])
                 newTx.signature = sig
+                print(txCollection['sender'])
+                print(txCollection['recipient'])
+                print(txCollection['value'])
+                print(txCollection['time'])
+                print(txCollection['publicKey'])
 
-                if not txMethod.verifyTx(sig, dataBytes, newTx.sender):
+                if not txMethod.verifyTx(sig, dataBytes, txCollection['publicKey']):
                     raise("새로 들어온 트랜잭션 유효성 검증 실패")
                 txMethod.addToMempool(mempool, newTx)
                 #검증을 거친 tx 브로드 캐스트하기.

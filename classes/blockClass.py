@@ -1,3 +1,4 @@
+#블록 구성 요소
 class Block:
     def __init__(self, client):
         self.blockHeight = 0

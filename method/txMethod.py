@@ -12,21 +12,21 @@ def inputTx(mempool,client):
     try : 
         recipient = input("recipient : ")
         value = input("value : ")
-        newTx = txClass.tx(client.publicKey, recipient, value)
-        dataBytes = txToBytes(newTx)
+        newTx = txClass.tx(client.address.digest(), recipient, value)
+        dataBytes = txToBytes(newTx,client.publicKey)
         signTx(newTx, dataBytes, client.privateKey)
         if not verifyTx(newTx.signature, dataBytes, client.publicKey):
             return
         addToMempool(mempool, newTx)
         broadcast.broadcastTx(dataBytes, newTx.signature)
-    except(TypeError, ValueError) :
-        print(TypeError)
-        print(ValueError)
+    except(error) :
+        print(error)
         print("트랜잭션 입력 중 에러 발생!")
 
 #트랜잭션 데이터 규격에 맞게 수정.
-def txToBytes(tx):
+def txToBytes(tx, publicKey):
     return pickle.dumps(collections.OrderedDict({
+                'publicKey' : publicKey,
                 'sender': tx.sender,
                 'recipient': tx.recipient,
                 'value': tx.value,

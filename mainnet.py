@@ -6,6 +6,8 @@ import classes.blockClass as block
 import classes.txClass as txClass
 import classes.clientClass as client
 import networking.reception as reception
+import sys
+
 
 mempool = []
 ip = []
@@ -13,6 +15,11 @@ accounts = []
 client = client.Client()
 print(type(client.publicKey.to_string()))
 print(client.publicKey.to_string())
+print(sys.getsizeof(client.publicKey.to_string()))
+print(client.address)
+print(sys.getsizeof(client.address))
+
+
 
 #새로운 트랜잭션을 생성한다.
 def genNewTx():
@@ -38,6 +45,7 @@ genNewBlock_thread = threading.Thread(target = genNewBlock)
 genNewBlock_thread.start()
 
 while(True):
+    print(11)
     comm = input("gentx or recepstart \n")
     #트랜잭션 생성할 때
     if comm == 'gentx':
@@ -51,7 +59,12 @@ while(True):
         reception_thread.start()
     #트랜잭션 받고 싶지 않을 때
     elif comm == 'recep quit':
-        reception_thread.join()
+        reception_thread._delete()
+        print("reception서버 종료")
+    elif comm == 'genblock quit':
+        genNewBlock_thread._delete()
+        print("블록생성 종료")
+        break
     #없는 명령어일 때
     else : 
         print('존재하지 않는 명령어입니다.')
