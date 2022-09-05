@@ -3,6 +3,8 @@ from distutils.log import error
 import errno
 import hashlib
 import classes.blockClass as blockClass
+import networking.broadcast as broadcast
+import pickle
 
 #블록 생성하기.
 def genBlock(mempool, client, diff):
@@ -39,12 +41,25 @@ def mining(mempool, previousBlockHash, previousBlockHeight, diff, client):
     for i in newBlock.verifiedTx:
         print("from : %s, to : %s, value: %s \n" %(i.sender, i.recipient,i.value))
 
+    broadcast.broadcastBlock(newBlock)
+
     return newBlock
 
+#블록 데이터 collections 형태로 변환
+def blockDeserialized(dataBytes):
+    return pickle.loads(dataBytes)
 
 #블록 검증하기.
+# 1. 논스와 트랜잭션 데이터로 해시값 검증
+# 2. 트랜잭션 검증
+
 def verifyBlock(block):
-    #return bool
+    for i in block.verifiedTx:
+        if  i.publickey.verify(i.signature, data)
+            # return false
+        str += ("\n from : %s, to : %s, value: %s \n" %(i.sender, i.recipient, i.value))
+    if hashlib.sha256((str+"%s" %block.nonce).encode()).hexdigest() != block.BlockHash:
+        return False
     return
 
 #블록 데이터 베이스에 저장하기.

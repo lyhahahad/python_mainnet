@@ -4,6 +4,7 @@ import socketserver
 from typing import NewType
 import classes.txClass as txClass
 import method.txMethod as txMethod
+import method.blockMethod as blockMethod
 import classes.clientClass as client
 from inspect import signature
 import pickle 
@@ -51,6 +52,21 @@ def receptionServerStart(mempool, portNum):
                 #     # 블록 검증
                 #     # 블록 내에 포함된 트랜잭션 mempool에서 제거하기.
                 self.send_response(200)
+
+            if self.path == "/block":
+                # 역직렬화하고 서명 검증하기.
+                content_len = int(self.headers.get('Content-Length'))
+                post_body = self.rfile.read(content_len)
+                post_body = pickle.loads(post_body)
+                blockDeserialized = post_body['block']
+                print(blockDeserialized.verifiedTx)
+                print(blockDeserialized.previousBlockHash)
+                print(blockDeserialized.nonce)
+                print(blockDeserialized.BlockHash)
+                print(blockDeserialized.difficulty)
+                print(blockDeserialized.coinbase)
+                print(blockDeserialized.blockproducer)
+
 
     hostName = "localhost"
     serverPort = portNum

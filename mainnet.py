@@ -6,6 +6,7 @@ import classes.blockClass as block
 import classes.txClass as txClass
 import classes.clientClass as client
 import networking.reception as reception
+import networking.broadcast as broadcast
 import sys
 
 
@@ -31,7 +32,7 @@ def recNewTx(portNum):
 
 #새로운 블록을 생성할 때의 프로세스
 def genNewBlock():
-    blockMethod.genBlock(mempool, client, 7)
+    blockMethod.genBlock(mempool, client, 6)
     # blockMethod.broadcastBlock(newBlock)
     # blockMethod.modifyAccount(newBlock)
 
@@ -46,7 +47,7 @@ genNewBlock_thread.start()
 
 while(True):
     print(11)
-    comm = input("gentx or recepstart \n")
+    comm = input("gentx, recepstart, recep quit, genblock quit, addip \n")
     #트랜잭션 생성할 때
     if comm == 'gentx':
         genNewTx_thread = threading.Thread(target = genNewTx)
@@ -65,6 +66,9 @@ while(True):
         genNewBlock_thread._delete()
         print("블록생성 종료")
         break
+    elif comm == 'addip':
+        ip = input("ip address : ")
+        broadcast.addBroadcastIp(ip)
     #없는 명령어일 때
     else : 
         print('존재하지 않는 명령어입니다.')

@@ -12,7 +12,7 @@ def inputTx(mempool,client):
     try : 
         recipient = input("recipient : ")
         value = input("value : ")
-        newTx = txClass.tx(client.address.digest(), recipient, value)
+        newTx = txClass.tx(client.address.digest(), recipient, value, client.address)
         dataBytes = txToBytes(newTx,client.publicKey)
         signTx(newTx, dataBytes, client.privateKey)
         if not verifyTx(newTx.signature, dataBytes, client.publicKey):
