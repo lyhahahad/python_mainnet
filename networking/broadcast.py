@@ -6,9 +6,9 @@ import pickle
 # ips = ["http://127.0.0.1:8080", "http://127.0.0.1:8081"]
 ips = []
 
-def broadcastTx(dataBytes, sig):
+def broadcastTx(transactions):
     #직렬화해서 보내기.
-    serializedData=pickle.dumps({'data' : dataBytes, 'signature': sig})
+    serializedData=pickle.dumps({'transactions' : transactions})
     for i in ips:
         res = requests.post(i+'/tx', data=serializedData)
         print(res)

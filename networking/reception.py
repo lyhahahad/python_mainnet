@@ -29,32 +29,15 @@ def receptionServerStart(mempool, portNum):
                 content_len = int(self.headers.get('Content-Length'))
                 post_body = self.rfile.read(content_len)
                 post_body = pickle.loads(post_body)
-                dataBytes = post_body['data']
-                sig = post_body['signature']
-                
-                txCollection = txMethod.txToCollection(dataBytes)
-                newTx = txClass.tx(txCollection['sender'],txCollection['recipient'],txCollection['value'])
-                newTx.timeInit(txCollection['time'])
-                newTx.signature = sig
-                print(txCollection['sender'])
-                print(txCollection['recipient'])
-                print(txCollection['value'])
-                print(txCollection['time'])
-                print(txCollection['publicKey'])
+                txDeserialized = post_body['transactions']
+ 
 
-                if not txMethod.verifyTx(sig, dataBytes, txCollection['publicKey']):
+                if not txMethod.verifyTx(txDeserialized):
                     raise("새로 들어온 트랜잭션 유효성 검증 실패")
-                txMethod.addToMempool(mempool, newTx)
-                #검증을 거친 tx 브로드 캐스트하기.
-                # txMethod.broadcast.broadcastTx(dataBytes, newTx.signature)
-
-                # if self.path == "/block":
-                #     # 블록 검증
-                #     # 블록 내에 포함된 트랜잭션 mempool에서 제거하기.
+                txMethod.addToMempool(mempool, txDeserialized)
                 self.send_response(200)
 
             if self.path == "/block":
-                # 역직렬화하고 서명 검증하기.
                 content_len = int(self.headers.get('Content-Length'))
                 post_body = self.rfile.read(content_len)
                 post_body = pickle.loads(post_body)

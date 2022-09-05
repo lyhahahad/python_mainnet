@@ -13,20 +13,19 @@ def inputTx(mempool,client):
         recipient = input("recipient : ")
         value = input("value : ")
         newTx = txClass.tx(client.address.digest(), recipient, value, client.address)
-        dataBytes = txToBytes(newTx,client.publicKey)
+        dataBytes = txToBytes(newTx)
         signTx(newTx, dataBytes, client.privateKey)
         if not verifyTx(newTx.signature, dataBytes, client.publicKey):
             return
         addToMempool(mempool, newTx)
-        broadcast.broadcastTx(dataBytes, newTx.signature)
+        broadcast.broadcastTx(newTx)
     except(error) :
         print(error)
         print("트랜잭션 입력 중 에러 발생!")
 
-#트랜잭션 데이터 규격에 맞게 수정.
-def txToBytes(tx, publicKey):
+# 트랜잭션 데이터 규격에 맞게 수정.
+def txToBytes(tx):
     return pickle.dumps(collections.OrderedDict({
-                'publicKey' : publicKey,
                 'sender': tx.sender,
                 'recipient': tx.recipient,
                 'value': tx.value,
@@ -36,18 +35,16 @@ def txToBytes(tx, publicKey):
 def txToCollection(dataBytes):
     return pickle.loads(dataBytes)
 
-# def txToObject(tx):
-
-
 #개인키로 트랜잭션에 서명하기.
 def signTx(tx, dataBytes, privateKey):
     tx.signature = privateKey.sign(b"%s"%dataBytes)
 
 #공개키로 트랜잭션 검증하기.
-def verifyTx(sig, data, publicKey):
+def verifyTx(newTx):
     #공개키로 트랜잭션 검증.
     try:
-        publicKey.verify(sig, data)
+        dataBytes = txToBytes(newTx)
+        newTx.publickey.verify(newTx.signature, dataBytes)
         print("The signature is valid.")
         return True
     except (error):

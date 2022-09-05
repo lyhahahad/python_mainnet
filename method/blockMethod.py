@@ -50,9 +50,6 @@ def blockDeserialized(dataBytes):
     return pickle.loads(dataBytes)
 
 #블록 검증하기.
-# 1. 논스와 트랜잭션 데이터로 해시값 검증
-# 2. 트랜잭션 검증
-
 def verifyBlock(block):
     for i in block.verifiedTx:
         if  i.publickey.verify(i.signature, data)
@@ -69,7 +66,3 @@ def saveBlock(block):
 #account 데이터 베이스에 적용하기.
 def modifyAccount(tx):
     return
-
-# #fork 선택하기.
-# def forkChoice(blockchain, block):
-#     return
