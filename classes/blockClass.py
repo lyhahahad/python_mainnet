@@ -9,5 +9,3 @@ class Block:
         self.difficulty = 0
         self.coinbase = 100
         self.blockproducer = client.publicKey
-    
-    # def blockVerify

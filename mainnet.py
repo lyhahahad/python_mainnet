@@ -33,20 +33,11 @@ def recNewTx(portNum):
 #새로운 블록을 생성할 때의 프로세스
 def genNewBlock():
     blockMethod.genBlock(mempool, client, 6)
-    # blockMethod.broadcastBlock(newBlock)
-    # blockMethod.modifyAccount(newBlock)
 
-# #새로운 블록을 받았을 때의 프로세스
-# def recNewBlock(recblock):
-#     blockMethod.verifyBlock(recblock)
-#     blockMethod.saveBlock(recblock)
-#     blockMethod.modifyAccount(recblock)
-#     blockMethod.broadcastBlock(recblock)
 genNewBlock_thread = threading.Thread(target = genNewBlock)
 genNewBlock_thread.start()
 
 while(True):
-    print(11)
     comm = input("gentx, recepstart, recep quit, genblock quit, addip \n")
     #트랜잭션 생성할 때
     if comm == 'gentx':
@@ -62,10 +53,12 @@ while(True):
     elif comm == 'recep quit':
         reception_thread._delete()
         print("reception서버 종료")
+    #블록 생성 종료.
     elif comm == 'genblock quit':
         genNewBlock_thread._delete()
         print("블록생성 종료")
         break
+    #브로드 캐스트 ip 추가하기.
     elif comm == 'addip':
         ip = input("ip address : ")
         broadcast.addBroadcastIp(ip)

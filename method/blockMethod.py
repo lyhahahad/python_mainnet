@@ -1,10 +1,10 @@
-from __future__ import barry_as_FLUFL
-from distutils.log import error
-import errno
+
 import hashlib
 import classes.blockClass as blockClass
 import networking.broadcast as broadcast
 import pickle
+import collections
+
 
 #블록 생성하기.
 def genBlock(mempool, client, diff):
@@ -49,15 +49,24 @@ def mining(mempool, previousBlockHash, previousBlockHeight, diff, client):
 def blockDeserialized(dataBytes):
     return pickle.loads(dataBytes)
 
+# 트랜잭션 데이터 규격에 맞게 수정.
+def txToBytes(tx):
+    return pickle.dumps(collections.OrderedDict({
+                'sender': tx.sender,
+                'recipient': tx.recipient,
+                'value': tx.value,
+                'time' : tx.time}))
+
 #블록 검증하기.
 def verifyBlock(block):
     for i in block.verifiedTx:
-        if  i.publickey.verify(i.signature, data)
-            # return false
-        str += ("\n from : %s, to : %s, value: %s \n" %(i.sender, i.recipient, i.value))
-    if hashlib.sha256((str+"%s" %block.nonce).encode()).hexdigest() != block.BlockHash:
-        return False
-    return
+        # 트랜잭션 서명 검증.
+        if not (i.publickey.verify(i.signature, txToBytes(i))):
+            return False
+        # 블록 해시 값 검증
+        if hashlib.sha256((str+"%s" %block.nonce).encode()).hexdigest() != block.BlockHash:
+            return False
+    return True
 
 #블록 데이터 베이스에 저장하기.
 def saveBlock(block):

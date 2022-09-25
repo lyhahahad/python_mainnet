@@ -1,9 +1,7 @@
 from distutils.log import error
 import classes.txClass as txClass
-import classes.clientClass as clients
 import networking.broadcast as broadcast
 import collections
-import ecdsa
 import pickle
 
 
@@ -41,7 +39,6 @@ def signTx(tx, dataBytes, privateKey):
 
 #공개키로 트랜잭션 검증하기.
 def verifyTx(newTx):
-    #공개키로 트랜잭션 검증.
     try:
         dataBytes = txToBytes(newTx)
         newTx.publickey.verify(newTx.signature, dataBytes)
