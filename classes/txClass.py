@@ -7,9 +7,9 @@ class tx:
         self.sender = sender
         self.recipient = recipient
         self.value = value
-        self.time = datetime.datetime.now()
+        self.publickey = publickey
         self.signature = ""
-        self.publickey = ''
-        
+        self.time = datetime.datetime.now()
+
     def timeInit(self, time):
         self.time =time

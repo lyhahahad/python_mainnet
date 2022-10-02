@@ -10,10 +10,10 @@ def inputTx(mempool,client):
     try : 
         recipient = input("recipient : ")
         value = input("value : ")
-        newTx = txClass.tx(client.address.digest(), recipient, value, client.address)
+        newTx = txClass.tx(client.address.digest(), recipient, value, client.publicKey)
         dataBytes = txToBytes(newTx)
         signTx(newTx, dataBytes, client.privateKey)
-        if not verifyTx(newTx.signature, dataBytes, client.publicKey):
+        if not verifyTx(newTx):
             return
         addToMempool(mempool, newTx)
         broadcast.broadcastTx(newTx)

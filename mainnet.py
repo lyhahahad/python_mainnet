@@ -1,3 +1,4 @@
+from cgi import test
 import threading
 from types import new_class
 import method.blockMethod as blockMethod
@@ -26,10 +27,13 @@ def recNewTx(portNum):
 
 #블록 생성.
 def genNewBlock():
-    blockMethod.genBlock(mempool, client, 6)
+    blockMethod.genBlock(mempool, client, 5)
 
 genNewBlock_thread = threading.Thread(target = genNewBlock)
 genNewBlock_thread.start()
+#test
+test_thread = threading.Thread(target = recNewTx, args=(8080,))
+test_thread.start()
 
 while(True):
     comm = input("gentx, recepstart, recep quit, genblock quit, addip \n")

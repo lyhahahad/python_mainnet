@@ -5,5 +5,5 @@ import hashlib
 class Client:
    def __init__(self):
       self.privateKey = SigningKey.generate() # uses NIST192p
-      self.publicKey = self.privateKey.verifying_key
+      self.publicKey = self.privateKey.get_verifying_key()
       self.address = hashlib.sha256((self.publicKey.to_string()))
