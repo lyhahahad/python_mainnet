@@ -4,8 +4,8 @@ class Block:
         self.blockHeight = 0
         self.verifiedTx = []
         self.previousBlockHash = ""
-        self.nonce = ""
         self.BlockHash = ""
+        self.nonce = ""
         self.difficulty = 0
         self.coinbase = 100
         self.blockproducer = client.publicKey
