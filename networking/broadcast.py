@@ -5,14 +5,14 @@ import time
 # https://hsyang.net/posts/python-requests-library-timeout/
 # http tcp ip +에러 코드 중심으로 해결
 ips = ["http://127.0.0.1:8080"]
-# ips = []
+ips = []
 # response가 올 때까지 기다려야 한다. 기다리지 않고 다른 것을 실행하면 에러가 발생함. js의 await같은 기능이 있어야 한다.
 # 트랜잭션 다른 노드(ip)에 전송
 def broadcastTx(transactions):
     serializedData=pickle.dumps({'transactions' : transactions})
     for i in ips:
         print(111111111111)
-        res = requests.post(i+'/tx', data=serializedData, timeout=(1, 50))
+        requests.post(i+'/tx', data=serializedData, timeout=(1, 50))
         print(2222222222222)
         print(res)
     return

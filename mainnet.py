@@ -27,13 +27,11 @@ def recNewTx(portNum):
 
 #블록 생성.
 def genNewBlock():
-    blockMethod.genBlock(mempool, client, 5)
+    blockMethod.genBlock(mempool, client, 8)
 
 genNewBlock_thread = threading.Thread(target = genNewBlock)
 genNewBlock_thread.start()
-#test
-test_thread = threading.Thread(target = recNewTx, args=(8080,))
-test_thread.start()
+
 
 while(True):
     comm = input("gentx, recepstart, recep quit, genblock quit, addip \n")
