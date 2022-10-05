@@ -1,13 +1,10 @@
 import requests
-import json
 import pickle
-import time
-# https://hsyang.net/posts/python-requests-library-timeout/
-# http tcp ip +에러 코드 중심으로 해결
+
 ips = ["http://127.0.0.1:8080"]
 ips = []
-# response가 올 때까지 기다려야 한다. 기다리지 않고 다른 것을 실행하면 에러가 발생함. js의 await같은 기능이 있어야 한다.
-# 트랜잭션 다른 노드(ip)에 전송
+
+
 def broadcastTx(transactions):
     serializedData=pickle.dumps({'transactions' : transactions})
     for i in ips:
@@ -33,3 +30,16 @@ def broadcastBlock(block):
 def addBroadcastIp(ip):
     global ips
     ips.append(ip)
+
+
+# import socket
+ 
+# server_ip = "127.0.0.1"
+# server_port = 3000
+# server_addr_port = (server_ip, server_port)
+ 
+# msg_from_client = "Hello Server from client"
+# bytes_to_send = str.encode(msg_from_client)
+ 
+# udp_client_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+# udp_client_socket.sendto(bytes_to_send, server_addr_port)
