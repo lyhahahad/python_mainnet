@@ -40,7 +40,7 @@ def mining(mempool, previousBlockHash, previousBlockHeight, diff, client):
     newBlock.blockHeight = previousBlockHeight+1
     newBlock.difficulty = diff
 
-    broadcast.broadcastBlock(newBlock)
+    broadcast.broadcast(newBlock)
 
     return newBlock
 

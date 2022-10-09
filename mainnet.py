@@ -27,7 +27,7 @@ def recNewTx(portNum):
 
 #블록 생성.
 def genNewBlock():
-    blockMethod.genBlock(mempool, client, 8)
+    blockMethod.genBlock(mempool, client, 4)
 
 genNewBlock_thread = threading.Thread(target = genNewBlock)
 genNewBlock_thread.start()

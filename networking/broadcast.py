@@ -1,35 +1,42 @@
-import requests
 import pickle
+import socket
+import requests
+import classes.txClass as tx
+ips = ["127.0.0.1"]
+port = 8080
 
-ips = ["http://127.0.0.1:8080"]
-ips = []
+udp_client_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
+#트랜잭션 or 블록 브로드 캐스트
+def broadcast(data):
+    print(str(type(data)))
+    serializedData=pickle.dumps(data)
+    
 
-def broadcastTx(transactions):
-    serializedData=pickle.dumps({'transactions' : transactions})
     for i in ips:
-        print(111111111111)
-        requests.post(i+'/tx', data=serializedData, timeout=(1, 50))
-        print(2222222222222)
-        print(res)
-    return
-
-
-#블록 다른 노드(ip)에 전송
-def broadcastBlock(block):
-    serializedData=pickle.dumps({'block' : block})
-    for i in ips:
-        print(33333333333)
-
-        res = requests.post(i+'/block', data=serializedData,timeout=(1, 50))
-        print(44444444444444)
-        print(res)
-    return
+        print(i)
+        udp_client_socket.sendto(serializedData, (i, port))
 
 #브로드 캐스트할 ip 추가하기.
 def addBroadcastIp(ip):
     global ips
     ips.append(ip)
+
+
+# def broadcastTx(transactions):
+#     serializedData=pickle.dumps({'transactions' : transactions})
+#     for i in ips:
+#         requests.post(i+'/tx', data=serializedData, timeout=(1, 50))
+#     return
+
+
+# #블록 다른 노드(ip)에 전송
+# def broadcastBlock(block):
+#     serializedData=pickle.dumps({'block' : block})
+#     for i in ips:
+#         res = requests.post(i+'/block', data=serializedData,timeout=(1, 50))
+#     return
+
 
 
 # import socket

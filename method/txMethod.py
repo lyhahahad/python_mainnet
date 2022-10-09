@@ -16,7 +16,7 @@ def inputTx(mempool,client):
         if not verifyTx(newTx):
             return
         addToMempool(mempool, newTx)
-        broadcast.broadcastTx(newTx)
+        broadcast.broadcast(newTx)
     except(error) :
         print(error)
         print("트랜잭션 입력 중 에러 발생!")
