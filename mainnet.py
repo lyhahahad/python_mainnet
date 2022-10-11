@@ -26,10 +26,11 @@ def recNewTx(portNum):
     reception.receptionServerStart(mempool,portNum)
 
 #블록 생성.
-def genNewBlock():
-    blockMethod.genBlock(mempool, client, 4)
+def genNewBlock(prevHash):
+    blockMethod.genBlock(mempool, client, 4, prevHash)
 
-genNewBlock_thread = threading.Thread(target = genNewBlock)
+prevHash = "0"*64
+genNewBlock_thread = threading.Thread(target = genNewBlock, arg=prevHash)
 genNewBlock_thread.start()
 
 
@@ -43,7 +44,7 @@ while(True):
     #트랜잭션 recept 서버 시작
     elif comm == 'recepstart':
         portNum = int(input("portNum : "))
-        reception_thread = threading.Thread(target = recNewTx, args=(portNum,))
+        reception_thread = threading.Thread(target = recNewTx, args=(portNum,genNewTx_thread))
         reception_thread.start()
     #트랜잭션 recept 서버 종료
     elif comm == 'recep quit':

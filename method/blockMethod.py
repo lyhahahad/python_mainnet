@@ -7,8 +7,8 @@ import collections
 
 
 #블록 생성
-def genBlock(mempool, client, diff):
-    newBlock = mining(mempool, "0"*64, -1, diff, client)
+def genBlock(mempool, client, diff, prevHash):
+    newBlock = mining(mempool, prevHash, -1, diff, client)
     while(True):
         newBlock = mining(mempool,newBlock.BlockHash, newBlock.blockHeight,  diff, client)
         print("blockheight",newBlock.blockHeight)
@@ -49,10 +49,8 @@ def verifyBlock(block):
     str = block.previousBlockHash
     for i in block.verifiedTx:
         str += ("\n from : %s, to : %s, value: %s \n" %(i.sender, i.recipient, i.value))
-        # 트랜잭션 서명 검증.
         if not (i.publickey.verify(i.signature, txToBytes(i))):
             return False
-    # 블록 해시 값 검증
     if hashlib.sha256((str+"%s" %block.nonce).encode()).hexdigest() != block.BlockHash:
         return False
     return True

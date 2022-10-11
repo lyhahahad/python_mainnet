@@ -10,7 +10,7 @@ import pickle
 from ecdsa import VerifyingKey
 import socket
 
-def receptionServerStart(mempool, portNum):
+def receptionServerStart(mempool, portNum, genNewTx_thread):
     ip = "127.0.0.1"
     server_addr_port = (ip, portNum)
     buffersize = 100000000
@@ -37,7 +37,12 @@ def receptionServerStart(mempool, portNum):
                 raise("새로 들어온 트랜잭션 유효성 검증 실패")
             txMethod.addToMempool(mempool, msg)
             print(msg)
-        # if(str(type(msg)) == '<class 'classes.blockClass.Block'>'):
+        if(str(type(msg)) == "<class 'classes.blockClass.Block'>"):
+            if not blockMethod.verifyBlock(msg):
+                raise("새로 들어온 블록 유효성 검증 실패")
+            genNewTx_thread._delete()
+            genNewTx_thread.start()
+
 
 # def receptionServerStart(mempool, portNum):
 #     class MyServer(BaseHTTPRequestHandler):
